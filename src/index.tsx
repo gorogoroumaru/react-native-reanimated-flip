@@ -2,8 +2,9 @@ import Animated, {
   Easing,
   useAnimatedStyle,
   useDerivedValue,
-  useValue,
+  useSharedValue,
   withTiming,
+  interpolate,
 } from "react-native-reanimated"
 import { StyleSheet, ViewStyle } from "react-native"
 import React from "react"
@@ -35,14 +36,11 @@ const ReanimatedFlip = ({
   back,
   style,
 }: Props) => {
-  const value = useValue(side)
-  const rotatePosition = value.interpolate({
-    inputRange: [0, 1],
-    outputRange: [180, 360],
-  })
+  const value = useSharedValue(side)
+  const rotatePosition = interpolate(value.value, [0, 1], [180, 360])
 
   const rotateValue = useDerivedValue(() => {
-    return withTiming(rotatePosition[" __value"], {
+    return withTiming(rotatePosition, {
       duration: 500,
       easing: Easing.inOut(Easing.ease),
     })
