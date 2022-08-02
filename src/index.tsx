@@ -37,10 +37,12 @@ const ReanimatedFlip = ({
   style,
 }: Props) => {
   const value = useSharedValue(side)
-  const rotatePosition = interpolate(value.value, [0, 1], [180, 360])
+  const rotatePosition = useDerivedValue(() =>
+    interpolate(value.value, [0, 1], [180, 360])
+  )
 
   const rotateValue = useDerivedValue(() => {
-    return withTiming(rotatePosition, {
+    return withTiming(rotatePosition.value, {
       duration: 500,
       easing: Easing.inOut(Easing.ease),
     })
