@@ -5,7 +5,6 @@ import Animated, {
   useSharedValue,
   withTiming,
   interpolate,
-  runOnJS,
 } from "react-native-reanimated"
 import { StyleSheet, ViewStyle } from "react-native"
 import React from "react"
