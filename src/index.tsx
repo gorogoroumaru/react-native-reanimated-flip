@@ -5,6 +5,7 @@ import Animated, {
   useSharedValue,
   withTiming,
   interpolate,
+  Extrapolate,
 } from "react-native-reanimated"
 import { StyleSheet, ViewStyle } from "react-native"
 import React from "react"
@@ -36,14 +37,13 @@ const ReanimatedFlip = ({
   back,
   style,
 }: Props) => {
+  "worklet"
   const value = useSharedValue(side)
   const rotatePosition = useDerivedValue(() => {
-    "worklet"
-    return interpolate(value.value, [0, 1], [180, 360])
+    return interpolate(value.value, [0, 1], [180, 360], Extrapolate.CLAMP)
   })
 
   const rotateValue = useDerivedValue(() => {
-    "worklet"
     return withTiming(rotatePosition.value, {
       duration: 500,
       easing: Easing.inOut(Easing.ease),
@@ -91,7 +91,7 @@ const ReanimatedFlip = ({
   const animatedStyleFront = useAnimatedStyle(() => {
     return {
       opacity: opacityFront.value,
-      transform: [{ perspective }, { ...rotationFlip.value }],
+      transform: [{ perspective }, { rotateY: `${rotateValue.value}deg` }],
     }
   }, [rotate, side, rotationFlip])
 
